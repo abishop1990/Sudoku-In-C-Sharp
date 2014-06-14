@@ -1,6 +1,6 @@
 ﻿using System;
 
-class Program
+class Sudoku
 {
     static void Main(string[] args)
     {
