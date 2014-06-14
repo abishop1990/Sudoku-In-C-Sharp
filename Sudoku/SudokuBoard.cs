@@ -1,9 +1,8 @@
-﻿/*
- * SudokuBoard.cs
+﻿/* SudokuBoard.cs
+ *
+ * Main board structure for Sudoku game application
  * 
  * Written By Alan Bishop 6/14/14
- * 
- * Class for game boards of Sudoku
  */
 
 using System;
@@ -167,4 +166,5 @@ class Board
 		newBoard.CheckSolved();
 		return newBoard;
 	}
+
 }
