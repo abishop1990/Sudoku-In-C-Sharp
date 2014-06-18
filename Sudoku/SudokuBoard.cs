@@ -29,6 +29,20 @@ class Board
 		if (val > 9 || val < 0) return;
 		cells[row, column] = val;
 	}
+
+	public int GetNumBlanks()
+	{
+		int numBlanks = 0;
+		for(int r = 0; r < 9; ++r)
+		{
+			for (int c = 0; c < 9; ++c)
+			{
+				if (cells[r, c] == 0) numBlanks++;
+			}
+		}
+		return numBlanks;
+	}
+
 	public bool SetCellAndCheckSolved(int row, int column, int val)
 	{
 		SetCell(row, column, val);
