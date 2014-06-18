@@ -36,6 +36,8 @@ class Board
 	}
 	public bool IsSolved() { return solved; }
 
+
+
 	///////////////////////////SOLVING RELATED STUFF//////////////////////////////////////////////////
 
 	/* Checks rows, columns, diagonals, grids, updates solved bool */
@@ -108,16 +110,17 @@ class Board
 	private bool CheckSubGrid(int xstart, int ystart)
 	{
 		bool[] hasValue = new bool[10]; //Checking for this value (Ex: hasValue[1] = there is a 1 in row)
-		for (int i = xstart; i < xstart + 3; ++i)
+		for (int i = xstart; i < (xstart + 3); ++i)
 		{
-			for (int j = ystart; i < ystart + 3; ++j)
+			for (int j = ystart; j < (ystart + 3); ++j)
 			{
 				if (hasValue[cells[j, i]] == true) { return false; }
-				else hasValue[cells[j, i]] = true;
+				hasValue[cells[j, i]] = true;
 			}
 		}
 		return true;
 	}
+
 
 	/////////////////////////////END SOLVING RELATED STUFF///////////////////////////////////////////////////
 
@@ -140,10 +143,7 @@ class Board
 		for (int i = 0; i < 9; ++i)
 		{
 			str += rowSeperator;
-			for (int j = 0; j < 9; ++j)
-			{
-				str += columnSeperator + cells[i, j];
-			}
+			for (int j = 0; j < 9; ++j) { str += columnSeperator + cells[i, j]; }
 			str += columnSeperator;
 			str += row + "\n";
 			row++;
@@ -152,16 +152,13 @@ class Board
 		return str;
 	}
 
-
+	//I've heard online about implementing Cloneable interface...but this is simple enough for now
 	public Board copyBoard()
 	{
 		Board newBoard = new Board();
 		for (int i = 0; i < 9; ++i )
 		{
-			for(int j = 0; j < 9; ++j)
-			{
-				newBoard.SetCell(i,j,cells[i, j]);
-			}
+			for(int j = 0; j < 9; ++j) { newBoard.SetCell(i,j,cells[i, j]); }
 		}		
 		newBoard.CheckSolved();
 		return newBoard;

@@ -66,6 +66,7 @@ class ConsoleMode
 			Console.Write("Enter command (Type '?' for help): ");
 			string cmd = Console.ReadLine();
 			cmd = cmd.ToUpper();
+			if (cmd == null) { DisplayInputError(); }
 			if (cmd[0] == 'Q') Environment.Exit(0);
 			else if (cmd[0] == '?') DisplayHelp();
 			else if (cmd[0] == 'S') { DisplaySolvedPuzzle(solvedBoard); return; }
