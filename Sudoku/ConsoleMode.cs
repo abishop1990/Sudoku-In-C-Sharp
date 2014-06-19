@@ -28,16 +28,25 @@ class ConsoleMode
 			Console.WriteLine("2. How To Play");
 			Console.WriteLine("3. Exit");
 			Console.Write("Enter Selection: ");
-			string cmd = Console.ReadLine();
-			int cmdN = 0;
-			if (!Int32.TryParse(cmd, out cmdN) || cmdN > 3 || cmdN < 1)
-			{
-				DisplayInputError();
-				continue;
-			}
-			if (cmdN == 1) { NewPuzzle(); }
+			int cmdN = GetInputInt(1, 3);
+			if (cmdN == -1) { DisplayInputError(); continue; }
+			if (cmdN == 1)  { SelectPuzzle(); }
 			else if (cmdN == 2) { DisplayHelp(); }
 			else Environment.Exit(0);
+		}
+	}
+
+	public static void SelectPuzzle()
+	{
+		int level = 0;
+		while (level < 1 || level > 4)
+		{
+			Console.Clear();
+			Console.Write("Select Puzzle Level:\n" + "1. Easy\n2. Medium\n3. Hard\n4. Evil\n");
+			Console.Write("Enter Number: ");
+			level = GetInputInt(1, 4);
+			if (level == -1) { DisplayInputError(); continue; }
+			NewPuzzle(level);
 		}
 	}
 
@@ -54,14 +63,14 @@ class ConsoleMode
 	}
 
 
-	public static void NewPuzzle()
+	public static void NewPuzzle(int puzzleLevel)
 	{
-		Board solvedBoard = SudokuGenerator.newSolvedBoard();
-		Board puzzleBoard = SudokuGenerator.buildPuzzleBoard(solvedBoard, 2);
+		Board solvedBoard = SudokuGenerator.NewSolvedBoard();
+		Board puzzleBoard = SudokuGenerator.buildPuzzleBoard(solvedBoard, 1);
 		bool solved = false;
 		while (!solved)
 		{
-			//Console.Clear();
+			Console.Clear();
 			Console.WriteLine(puzzleBoard.ToString() + "\n");
 			Console.Write("Enter command (Type '?' for help): ");
 			string cmd = Console.ReadLine();
@@ -69,16 +78,18 @@ class ConsoleMode
 			if (cmd == null) { DisplayInputError(); }
 			if (cmd[0] == 'Q') Environment.Exit(0);
 			else if (cmd[0] == '?') DisplayHelp();
-			else if (cmd[0] == 'S') { DisplaySolvedPuzzle(solvedBoard); return; }
+			else if (cmd[0] == 'S') { DisplaySolvedPuzzle(puzzleBoard, solvedBoard); return; }
 			else if (ValidMove(cmd)) solved = puzzleBoard.IsSolved();
 			else { DisplayInputError(); continue; }
 		}
 	}
-	public static void DisplaySolvedPuzzle(Board solvedBoard)
+	public static void DisplaySolvedPuzzle(Board puzzleBoard, Board solvedBoard)
 	{
 		Console.Clear();
+		Console.WriteLine("Puzzle Board:");
+		Console.WriteLine(puzzleBoard + "\n");
 		Console.WriteLine("Solution:\n");
-		Console.WriteLine(solvedBoard.ToString() + "\n");
+		Console.WriteLine(solvedBoard + "\n");
 		PromptToKeyPress();
 	}
 
@@ -87,6 +98,17 @@ class ConsoleMode
 		Console.WriteLine("\nPress Any Key To Continue");
 		Console.ReadKey();
 		Console.Clear();
+	}
+
+	public static int GetInputInt(int min, int max)
+	{
+		int inputValue = 0;
+		string input = Console.ReadLine();
+		if (!Int32.TryParse(input, out inputValue) || inputValue > max || inputValue < min)
+		{
+			inputValue = -1;
+		}
+		return inputValue;
 	}
 
 	private static void DisplayInputError()

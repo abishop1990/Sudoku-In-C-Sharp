@@ -157,7 +157,12 @@ class Board
 		for (int i = 0; i < 9; ++i)
 		{
 			str += rowSeperator;
-			for (int j = 0; j < 9; ++j) { str += columnSeperator + cells[i, j]; }
+			for (int j = 0; j < 9; ++j) 
+			{
+				str += columnSeperator;
+				if (cells[i, j] != 0) str += cells[i, j];
+				else str += " ";
+			}
 			str += columnSeperator;
 			str += row + "\n";
 			row++;

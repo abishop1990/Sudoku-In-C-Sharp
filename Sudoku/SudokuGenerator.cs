@@ -14,10 +14,10 @@ using System.Linq;
 
 class SudokuGenerator
 {
-	private const int EASY_BLANKS = 45;
-	private const int MEDIUM_BLANKS = 50;
-	private const int HARD_BLANKS = 55;
-	private const int EVIL_BLANKS = 60;
+	private const int EASY_BLANKS = 40;
+	private const int MEDIUM_BLANKS = 45;
+	private const int HARD_BLANKS = 50;
+	private const int EVIL_BLANKS = 55;
 
 
 	public static Board buildPuzzleBoard(Board solvedBoard, int level)
@@ -48,12 +48,12 @@ class SudokuGenerator
 	}
 
 	//Generate a new solved board
-	public static Board newSolvedBoard()
+	public static Board NewSolvedBoard()
 	{
 		Board newBoard = new Board();
 
 		//Setup possible values for each cell
-		List<int>[,] possibilities = generateDefaultPossibilities();
+		List<int>[,] possibilities = GenerateDefaultPossibilities();
 
 		//Create a solved board
 		SolveBoard(newBoard, 0, 0, possibilities);
@@ -123,7 +123,7 @@ class SudokuGenerator
 
 
 	//Generate base list of possiblities
-	private static List<int>[,] generateDefaultPossibilities()
+	private static List<int>[,] GenerateDefaultPossibilities()
 	{
 		//Create initial list
 		List<int>[,] possibilities = new List<int>[9, 9];
@@ -171,7 +171,7 @@ class SudokuGenerator
 	}
 
 	//This doesn't account for backtracking!
-	private static void matchPossiblitiesToBoard(Board board, ref List<int>[,] possibilities)
+	private static void MatchPossiblitiesToBoard(Board board, ref List<int>[,] possibilities)
 	{
 		for (int row = 0; row < 9; ++row)
 		{
@@ -193,8 +193,7 @@ class SudokuGenerator
 
 		while (board.GetNumBlanks() < numBlanks && blankable.Count > 0)
 		{
-			Console.WriteLine("Removing cells..." + (numBlanks - board.GetNumBlanks()) + 
-							  " left, " + blankable.Count + " possible blanks");
+			//Console.WriteLine("Removing cells..." + (numBlanks - board.GetNumBlanks()) +  " left, " + blankable.Count + " possible blanks");
 			//Pick a random cell
 			int cellIndex = rng.Next(0, blankable.Count - 1);
 			int row = cellIndex / 9;
@@ -203,9 +202,11 @@ class SudokuGenerator
 			//Try to remove it 
 			if (CanRemove(board, row, col))
 			{
+				//Console.WriteLine("Successfully removed.[" + row + "," + col + "]");
 				//Keep removed if this produces only the unique solution
 				board.SetCell(row, col, 0);
 			}
+			//else Console.WriteLine("Failed to removed.[" + row + "," + col + "]");
 			//Remove from possible blankable cells
 			blankable.Remove(cellIndex);
 		}
@@ -215,10 +216,10 @@ class SudokuGenerator
 	{
 		int currentValue = board.GetCell(row, col);
 		if (currentValue == 0) return false; 
-		Console.WriteLine("Trying to remove [" + row + "," + col + "] = " + currentValue);
+		//Console.WriteLine("Trying to remove [" + row + "," + col + "] = " + currentValue);
 		//Create a list of possible numbers per cell  
-		List<int>[,] possibilities = generateDefaultPossibilities();
-		matchPossiblitiesToBoard(board, ref possibilities);
+		List<int>[,] possibilities = GenerateDefaultPossibilities();
+		MatchPossiblitiesToBoard(board, ref possibilities);
 
 		//This is a little tricky, but we want to see if we CAN'T solve this board without this value
 		//If we can't solve the board by changing this value, we have a unique board, we can remove this cell
