@@ -57,11 +57,11 @@ class ConsoleMode
 	public static void NewPuzzle()
 	{
 		Board solvedBoard = SudokuGenerator.newSolvedBoard();
-		Board puzzleBoard = SudokuGenerator.buildPuzzleBoard(solvedBoard, 1);
+		Board puzzleBoard = SudokuGenerator.buildPuzzleBoard(solvedBoard, 2);
 		bool solved = false;
 		while (!solved)
 		{
-			Console.Clear();
+			//Console.Clear();
 			Console.WriteLine(puzzleBoard.ToString() + "\n");
 			Console.Write("Enter command (Type '?' for help): ");
 			string cmd = Console.ReadLine();
