@@ -6,9 +6,10 @@
  */
 
 //Comment/uncomment this to run command line
-#define CONSOLE_MODE
+//#define CONSOLE_MODE
 
 using System;
+using System.Windows.Forms;
 
 class Sudoku
 {
@@ -18,9 +19,12 @@ class Sudoku
 			ConsoleMode.WelcomeScreen();
 			ConsoleMode.MainMenu();
 		#else
+			GUI game = new GUI();
+			Application.Run(game);
+			
 			//When I'm done, I'll put a GUI mode here, so I can switch between them
 		#endif
-	
+		
 	}
 }
 
