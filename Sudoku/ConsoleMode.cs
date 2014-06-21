@@ -67,6 +67,7 @@ class ConsoleMode
 	{
 		Board solvedBoard = SudokuGenerator.NewSolvedBoard();
 		Board puzzleBoard = SudokuGenerator.buildPuzzleBoard(solvedBoard, 1);
+		Board startBoard = puzzleBoard.copyBoard();
 		bool solved = false;
 		while (!solved)
 		{
@@ -79,9 +80,10 @@ class ConsoleMode
 			if (cmd[0] == 'Q') Environment.Exit(0);
 			else if (cmd[0] == '?') DisplayHelp();
 			else if (cmd[0] == 'S') { DisplaySolvedPuzzle(puzzleBoard, solvedBoard); return; }
-			else if (ValidMove(cmd)) solved = puzzleBoard.IsSolved();
+			else if (ValidMove(startBoard, ref puzzleBoard,cmd)) solved = puzzleBoard.IsSolved();
 			else { DisplayInputError(); continue; }
 		}
+		Console.WriteLine("Congratulations, Puzzle Is Solved!\nPress Any Key To Continue");
 	}
 	public static void DisplaySolvedPuzzle(Board puzzleBoard, Board solvedBoard)
 	{
@@ -117,9 +119,26 @@ class ConsoleMode
 		PromptToKeyPress();
 	}
 
-	private static bool ValidMove(string cmd)
+	private static bool ValidMove(Board startBoard, ref Board puzzleBoard,string cmd)
 	{
-		return false;
+		//Parse the input string
+		cmd = cmd.ToUpper();
+		string[] args = cmd.Split(' ');
+		if(args.Length != 3) { return false; }
+		if (args[0].Length != 1 || args[1].Length != 1) return false;  
+		int col = ((int)args[0][0]) - ((int)'A');
+		int row = ((int)args[1][0]) - ((int)'A');
+		int newValue = Int32.Parse(args[2]);
+		Console.WriteLine("Trying to set row " + row + " col " + col + " to " + newValue);
+		if (row < 0 || row > 8 || col < 0 || col > 8 || newValue < 1 || newValue > 9) return false;
+
+		//If input is valid, next check that the move is actually allowed
+		if (startBoard.GetCell(row, col) != 0) return false;
+
+		//Make the move
+		puzzleBoard.SetCellAndCheckSolved(row, col, newValue);
+
+		return true;
 	}
 
 
