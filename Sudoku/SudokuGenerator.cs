@@ -22,7 +22,7 @@ class SudokuGenerator
 
 	public static Board buildPuzzleBoard(Board solvedBoard, int level)
 	{
-		Board newBoard = solvedBoard.copyBoard();
+		Board newBoard = solvedBoard.CopyBoard();
 
 		switch (level)
 		{

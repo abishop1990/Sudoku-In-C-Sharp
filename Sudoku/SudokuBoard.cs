@@ -172,7 +172,7 @@ class Board
 	}
 
 	//I've heard online about implementing Cloneable interface...but this is simple enough for now
-	public Board copyBoard()
+	public Board CopyBoard()
 	{
 		Board newBoard = new Board();
 		for (int i = 0; i < 9; ++i )

@@ -56,6 +56,7 @@ class ConsoleMode
 		Console.WriteLine("Solve a 9x9 grid of numbers by making every, row, column and 3x3 grid contain numbers 1-9");
 		Console.WriteLine("Input done via command prompt (Ex: 'A B 4' would place a 4 in row A, column B)");
 		Console.WriteLine("Type 'X' to have the computer tell you if you have any errors");
+		Console.WriteLine("Type 'R' to reset the board to the original puzzle state");
 		Console.WriteLine("Type 'S' to have computer solve the puzzle for you");
 		Console.WriteLine("Type '?' for help");
 		Console.WriteLine("Type 'Q' to quit the program during gameplay");
@@ -67,7 +68,7 @@ class ConsoleMode
 	{
 		Board solvedBoard = SudokuGenerator.NewSolvedBoard();
 		Board puzzleBoard = SudokuGenerator.buildPuzzleBoard(solvedBoard, 1);
-		Board startBoard = puzzleBoard.copyBoard();
+		Board startBoard = puzzleBoard.CopyBoard();
 		bool solved = false;
 		while (!solved)
 		{
@@ -79,8 +80,10 @@ class ConsoleMode
 			if (cmd == null) { DisplayInputError(); }
 			if (cmd[0] == 'Q') Environment.Exit(0);
 			else if (cmd[0] == '?') DisplayHelp();
+			else if (cmd[0] == 'R') puzzleBoard = startBoard.CopyBoard();
 			else if (cmd[0] == 'S') { DisplaySolvedPuzzle(puzzleBoard, solvedBoard); return; }
-			else if (ValidMove(startBoard, ref puzzleBoard,cmd)) solved = puzzleBoard.IsSolved();
+			else if (cmd[0] == 'X') { CheckBoard(puzzleBoard, solvedBoard); }
+			else if (ValidMove(startBoard, ref puzzleBoard, cmd)) { solved = puzzleBoard.IsSolved(); }
 			else { DisplayInputError(); continue; }
 		}
 		Console.WriteLine("Congratulations, Puzzle Is Solved!\nPress Any Key To Continue");
@@ -92,6 +95,26 @@ class ConsoleMode
 		Console.WriteLine(puzzleBoard + "\n");
 		Console.WriteLine("Solution:\n");
 		Console.WriteLine(solvedBoard + "\n");
+		PromptToKeyPress();
+	}
+
+	private static void CheckBoard(Board puzzleBoard, Board solvedBoard)
+	{
+		for (int r = 0; r < 9; ++r)
+		{
+			for(int c = 0; c < 9; ++c)
+			{
+				int puzzleCell = puzzleBoard.GetCell(r, c);
+				int solvedCell = solvedBoard.GetCell(r, c);
+				if(puzzleCell != 0 && puzzleCell != solvedCell)
+				{
+					Console.WriteLine("Something is wrong with the board...");
+					PromptToKeyPress();
+					return;
+				}
+			}
+		}
+		Console.WriteLine("Everything seems okay so far!");
 		PromptToKeyPress();
 	}
 
@@ -129,7 +152,7 @@ class ConsoleMode
 		int col = ((int)args[0][0]) - ((int)'A');
 		int row = ((int)args[1][0]) - ((int)'A');
 		int newValue = Int32.Parse(args[2]);
-		Console.WriteLine("Trying to set row " + row + " col " + col + " to " + newValue);
+		//Console.WriteLine("Trying to set row " + row + " col " + col + " to " + newValue);
 		if (row < 0 || row > 8 || col < 0 || col > 8 || newValue < 1 || newValue > 9) return false;
 
 		//If input is valid, next check that the move is actually allowed
