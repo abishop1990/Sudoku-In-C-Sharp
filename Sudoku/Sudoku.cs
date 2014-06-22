@@ -16,15 +16,14 @@ class Sudoku
 	static void Main(string[] args)
 	{
 		#if CONSOLE_MODE
+		//Run at Terminal
 			ConsoleMode.WelcomeScreen();
 			ConsoleMode.MainMenu();
 		#else
+		//Run in GUI
 			GUI game = new GUI();
 			Application.Run(game);
-			
-			//When I'm done, I'll put a GUI mode here, so I can switch between them
 		#endif
-		
 	}
 }
 

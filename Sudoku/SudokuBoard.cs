@@ -7,7 +7,7 @@
 
 using System;
 
-class Board
+public class Board
 {
 	private int[,] cells;
 	private bool solved;
@@ -24,6 +24,12 @@ class Board
 	}
 
 	public int GetCell(int row, int column) { return cells[row, column]; }
+	public string GetCellString(int row, int column)
+	{
+		string str = "";
+		if (cells[row, column] != 0) { str += cells[row, column]; }
+		return str;
+	}
 	public void SetCell(int row, int column, int val)
 	{
 		if (val > 9 || val < 0) return;
